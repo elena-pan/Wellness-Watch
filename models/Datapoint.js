@@ -8,7 +8,7 @@ const DatapointSchema = new Schema({
   },
   date: {
     type: Date,
-    required: True
+    required: true
   },
   notes: {
     type: String,

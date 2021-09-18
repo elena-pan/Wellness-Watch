@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const path = require("path");
 const passport = require("passport");
 
-const images = require("./routes/api/images");
+const datapoints = require("./routes/api/datapoints");
 const auth = require("./routes/api/auth");
 
 require('dotenv').config();
@@ -28,7 +28,7 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 // Routes
-app.use("/api/images", images);
+app.use("/api/datapoints", datapoints);
 app.use("/api/auth", auth);
 
 // // Configure Express to also serve frontend
