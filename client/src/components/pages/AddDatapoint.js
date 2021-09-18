@@ -46,6 +46,7 @@ function AddImage(props) {
         };
         axios.post(`${serverUrl}/api/datapoints`, datapoint)
             .then(response => {
+                M.toast({html: 'Log added', classes: "green lighten-1"})
                 props.history.replace("/");
             })
             .catch(err => M.toast({html: 'An error has occurred. Please try again', classes: "red lighten-1"}));

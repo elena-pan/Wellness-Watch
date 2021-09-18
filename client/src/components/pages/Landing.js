@@ -200,7 +200,7 @@ function Landing(props) {
                     </label>
                     <Link
                         to="/add"
-                        className="add-btn btn btn-large waves-effect waves-light hoverable blue accent-3"
+                        className="add-btn btn btn-large waves-effect waves-light hoverable"
                         >
                             Add Log
                         </Link>

@@ -47,7 +47,7 @@ function Login(props) {
                         <b>Login</b>
                     </h4>
                     <p className="grey-text text-darken-1">
-                        Don't have an account? <Link to="/register">Register</Link>
+                        Don't have an account? <Link to="/register" className="teal-text">Register</Link>
                     </p>
                     </div>
                     <form noValidate onSubmit={onSubmit}>
@@ -95,7 +95,7 @@ function Login(props) {
                             marginTop: "1rem"
                         }}
                         type="submit"
-                        className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                        className="btn btn-large waves-effect waves-light hoverable"
                         >
                             Login
                         </button>
