@@ -41,8 +41,7 @@ const DatapointSchema = new Schema({
   physiological: {
       type: Number,
       required: true
-  },
-
+  }
 });
 
 module.exports = User = mongoose.model("users", DatapointSchema);

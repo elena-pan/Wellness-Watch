@@ -1,20 +1,73 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from "axios"
 import M from "materialize-css";
+
 import LinearLoadingSymbol from "../layout/LinearLoadingSymbol";
 import './Landing.css'
 
-const mockData = [
-    {
-        userid: 1,
-        date: new Date(),
-        notes: "kjsdlf;fs;sdfjoisfoijfojifoijf",
-        sleeptime: 12,
-        sleepquality: 5
-    },
-]
+const mockData = {
+    timedata: [
+        {
+            date: new Date("2021-09-11"),
+            notes: "kjsdlf;fs;sdfjoisfoijfojifoijf",
+            sleeptime: 12,
+            sleepquality: 5
+        },
+        {
+            date: new Date("2021-09-12"),
+            notes: "wheeeeeeeeeeeeeeeeeeeeeee eeeee ee e e e e",
+            sleeptime: 3,
+            sleepquality: 1
+        },
+        {
+            date: new Date("2021-09-13"),
+            notes: "blah blah blah blah blah blahhhhh booooooooooooop",
+            sleeptime: 9,
+            sleepquality: 4
+        },
+        {
+            date: new Date("2021-09-14"),
+            notes: "i like cheese and it is salty wheeeee alsdf abacus",
+            sleeptime: 5,
+            sleepquality: 10
+        },
+        {
+            date: new Date("2021-09-15"),
+            notes: "",
+            sleeptime: 8,
+            sleepquality: 8
+        },
+        {
+            date: new Date("2021-09-16"),
+            notes: "asdfsdf",
+            sleeptime: 9,
+            sleepquality: 9
+        },
+        {
+            date: new Date("2021-09-17"),
+            notes: "",
+            sleeptime: 8,
+            sleepquality: 10
+        },
+        {
+            date: new Date("2021-09-18"),
+            notes: "",
+            sleeptime: 8,
+            sleepquality: 9
+        }
+    ],
+    maslows: {
+        actualization: 2,
+        esteem: 3,
+        belongingness: 9,
+        safety: 10,
+        physiological: 6
+    }
+}
 const serverUrl = process.env.REACT_APP_SERVER_URL;
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
 function Landing(props) {
 
@@ -79,9 +132,29 @@ function Landing(props) {
                     </React.Fragment>);
     }
     else {
-        content = (<div className="row">
-                        
-                    </div>);
+        content = (
+                <React.Fragment>
+                    <p style={{"textAlign": "center", "marginBottom": 0, "paddingTop": "0.5rem"}}><b>Sleep</b></p>
+                    <ResponsiveContainer height={300} width={500}> 
+                        <LineChart data={data.timedata} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
+                        <Line type="monotone" dataKey="sleeptime" stroke="#009688" name="Sleep time" />
+                        <Line type="monotone" dataKey="sleepquality" stroke="#E5B522" name="Sleep quality" />
+                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                        <Legend verticalAlign="top" align="center" height={30} />
+                        <Tooltip labelFormatter={date => `${months[date.getMonth()]} ${date.getDate()}`} formatter={(value, name, props) => {
+                            if (name === "Sleep time") {
+                                return [`${value} hours`, name, props];
+                            }
+                            else if (name === "Sleep quality") {
+                                return [value, name, props];
+                            }
+                        }} />
+                        <XAxis dataKey='date' tickFormatter={date => `${months[date.getMonth()]} ${date.getDate()}`} />
+                        <YAxis dataKey="sleeptime" yAxisId={0}/>
+                        <YAxis dataKey="sleepquality" yAxisId={1} orientation="right" />
+                        </LineChart>
+                    </ResponsiveContainer>
+                    </React.Fragment>);
     }
 
     return (<div className="container">
