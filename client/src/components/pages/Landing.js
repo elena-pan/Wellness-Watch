@@ -6,7 +6,13 @@ import LinearLoadingSymbol from "../layout/LinearLoadingSymbol";
 import './Landing.css'
 
 const mockData = [
-    
+    {
+        userid: 1,
+        date: new Date(),
+        notes: "kjsdlf;fs;sdfjoisfoijfojifoijf",
+        sleeptime: 12,
+        sleepquality: 5
+    },
 ]
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
@@ -40,7 +46,8 @@ function Landing(props) {
             }
         }
         M.Datepicker.init(elem2, options2);
-        setData("asdfasdf")
+        setLoading(false);
+        setData(mockData);
         // getData().catch(err => console.log(err))
     }, [])
 

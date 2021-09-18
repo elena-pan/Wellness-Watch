@@ -25,23 +25,23 @@ const DatapointSchema = new Schema({
   actualization: {
     type: Number,
     required: true
-},
-esteem: {
-    type: Number,
-    required: true
-},
-belongingness: {
-    type: Number,
-    required: true
-},
-safety: {
-    type: Number,
-    required: true
-},
-physiological: {
-    type: Number,
-    required: true
-},
+  },
+  esteem: {
+      type: Number,
+      required: true
+  },
+  belongingness: {
+      type: Number,
+      required: true
+  },
+  safety: {
+      type: Number,
+      required: true
+  },
+  physiological: {
+      type: Number,
+      required: true
+  },
 
 });
 
