@@ -9,8 +9,7 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true
-  },
-  expires: { type: Date, default: Date.now, expires: 43200 } // 12 hours
+  }
 });
 
 module.exports = User = mongoose.model("users", UserSchema);
