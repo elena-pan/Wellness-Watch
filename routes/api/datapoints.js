@@ -1,31 +1,25 @@
 const router = require('express').Router();
 const passport = require("passport");
-const Datapoint = require('../../models/zDatapoint');
-const datapoint = require('../../models/zDatapoint');
-//const User = require("../../models/User");
+const Datapoint = require('../../models/Datapoint');
 
 router.get("",
-    //passport.authenticate("jwt", { session: false }), 
+    passport.authenticate("jwt", { session: false }), 
     async (req, res) => {
-        const user = { 
-            username: user.username 
-        };
         result = {
             "timedata": [],
             "maslows": {
                 "actualization": 0,
-                "esteeem": 0,
+                "esteem": 0,
                 "belongingness": 0,
                 "safety": 0,
                 "physiological": 0,
             }
 
         }
-        datapoint.find({ username: req.user.username},
-            function (err, docs) {
-                console.log("gathered datapoints; processing")
+        Datapoint.find({ username: req.user.username })
+            .then(docs => {
                 counter = 0
-                docs.array.forEach(element => {
+                docs.forEach(element => {
                     datedata = {
                         "date": element.date,
                         "notes": element.notes,
@@ -34,66 +28,41 @@ router.get("",
                     }
                     result.timedata.push(datedata);
                     result.maslows.actualization += element.actualization;
-                    result.maslows.esteeem += element.esteem;
+                    result.maslows.esteem += element.esteem;
                     result.maslows.belongingness += element.belongingness;
                     result.maslows.safety += element.safety;
                     result.maslows.physiological += element.physiological;
                 });
                 if (counter != 0) {
-                    result.actualization /= result.timedata.length();
-                    result.esteem /= result.timedata.length();
-                    result.belongingness /= result.timedata.length();
-                    result.safety /= result.timedata.length();
-                    result.physiological /= result.timedata.length();
+                    result.maslows.actualization /= result.timedata.length();
+                    result.maslows.esteem /= result.timedata.length();
+                    result.maslows.belongingness /= result.timedata.length();
+                    result.maslows.safety /= result.timedata.length();
+                    result.maslows.physiological /= result.timedata.length();
                 }
+                res.json(result);
             })
             .catch(err => console.log(err))
-        console.log("datapoints processed");
-        try {
-            result.maslows.actualization /= result.timedata.length();
-            result.maslows.esteem /= result.timedata.length();
-            result.maslows.belongingness /= result.timedata.length();
-            result.maslows.safety /= result.timedata.length();
-            result.maslows.physiological /= result.timedata.length();
-        } catch (error) {
-            result = {
-                "timedata": [],
-                "maslows": {
-                    "actualization": 0,
-                    "esteeem": 0,
-                    "belongingness": 0,
-                    "safety": 0,
-                    "physiological": 0
-                }
-            }
-        }
-        console.log("done!");
-        res.json(result);
 });
 
-router.post("/upload",
-    //passport.authenticate("jwt", { session: false }), 
+router.post("",
+    passport.authenticate("jwt", { session: false }), 
     async (req, res) => {
-        const user = { 
-            id: 13, 
-            username: "test123"
-        };
-        console.log("hello");
-        Datapoint.findOne({ "userid": user.id, "date": req.date}).then(document => {    
+        Datapoint.findOne({ "username": req.user.username, "date": req.body.date }).then(document => {    
             if (document) {
                 return res.status(400).json({ error: "Data for this date exists" });
             } else {
                 const newData = new Datapoint({
-                    userid: 123,
-                    date: Date.now(),
-                    notes: "hello",
-                    sleeptime: 8,
-                    sleepquality: 5,
-                    actualization: 2,
-                    esteem: 3,
-                    belongingness: 4,
-                    safety: 5,
-                    physiological: 6
+                    username: req.user.username,
+                    date: req.body.date,
+                    notes: req.body.notes,
+                    sleeptime: req.body.sleeptime,
+                    sleepquality: req.body.sleepquality,
+                    actualization: req.body.actualization,
+                    esteem: req.body.esteem,
+                    belongingness: req.body.belongingness,
+                    safety: req.body.safety,
+                    physiological: req.body.physiological
                 });
                 newData.save()
                       .then(document => {
@@ -102,7 +71,6 @@ router.post("/upload",
                       .catch(err => console.log(err)); 
             }
         });
-        console.log("success??");
 });
 
 module.exports = router;

@@ -132,7 +132,7 @@ function AddImage(props) {
                             marginTop: "1rem"
                         }}
                         type="submit"
-                        className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                        className="btn btn-large waves-effect waves-light hoverable"
                         >
                             Submit
                         </button>

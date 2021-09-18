@@ -44,4 +44,4 @@ const DatapointSchema = new Schema({
   }
 });
 
-module.exports = User = mongoose.model("users", DatapointSchema);
+module.exports = Datapoint = mongoose.model("datapoints", DatapointSchema);

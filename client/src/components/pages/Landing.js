@@ -100,9 +100,7 @@ function Landing(props) {
             }
         }
         M.Datepicker.init(elem2, options2);
-        setLoading(false);
-        setData(mockData);
-        // getData().catch(err => console.log(err))
+        getData().catch(err => console.log(err))
     }, [])
 
     async function getData() {
@@ -111,6 +109,7 @@ function Landing(props) {
             .then(response => {
                 setLoading(false);
                 window.scrollTo(0, 0);
+                console.log(response.data)
                 setData(response.data);
             })
             .catch(err => {
@@ -172,7 +171,7 @@ function Landing(props) {
                             <Line type="monotone" dataKey="sleepquality" stroke="#E5B522" name="Sleep quality" />
                             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                             <Legend verticalAlign="top" align="center" height={30} />
-                            <Tooltip labelFormatter={date => `${months[date.getMonth()]} ${date.getDate()}`} formatter={(value, name, props) => {
+                            <Tooltip labelFormatter={date => `${months[new Date(date).getMonth()]} ${new Date(date).getDate()}`} formatter={(value, name, props) => {
                                 if (name === "Sleep time") {
                                     return [`${value} hours`, name, props];
                                 }
@@ -180,7 +179,7 @@ function Landing(props) {
                                     return [value, name, props];
                                 }
                             }} />
-                            <XAxis dataKey='date' tickFormatter={date => `${months[date.getMonth()]} ${date.getDate()}`} />
+                            <XAxis dataKey='date' tickFormatter={date => `${months[new Date(date).getMonth()]} ${new Date(date).getDate()}`} />
                             <YAxis dataKey="sleeptime" yAxisId={0}/>
                             <YAxis dataKey="sleepquality" yAxisId={1} orientation="right" />
                         </LineChart>
