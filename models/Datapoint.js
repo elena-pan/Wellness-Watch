@@ -21,4 +21,4 @@ const DatapointSchema = new Schema({
   expires: { type: Date, default: Date.now, expires: 43200 } // 12 hours
 });
 
-module.exports = User = mongoose.model("users", UserSchema);
+module.exports = User = mongoose.model("users", DatapointSchema);

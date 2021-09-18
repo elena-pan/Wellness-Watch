@@ -44,7 +44,7 @@ function Navbar(props) {
                             className="col s5 brand-logo left black-text"
                         >
                             <i className="material-icons">public</i>
-                            Image Repository
+                            HTN
                         </Link>
                         <ul className="right">
                             { loginLogoutLinks }

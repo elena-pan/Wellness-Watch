@@ -52,7 +52,7 @@ function App() {
           <Route exact path="/login" render={(props) => <Login {...props} user={user} setUser={setUser} />} />
           <Route exact path="/register" render={(props) => <Register {...props} user={user} />} />
           <ProtectedRoute exact path="/add-image" user={user} component={AddImage}/>
-          <Route path="/" render={(props) => <Landing {...props} user={user} />} />
+          <ProtectedRoute path="/" component={Landing} user={user} />
         </Switch>
         <Footer />
       </div>
