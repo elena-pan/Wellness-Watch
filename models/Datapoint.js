@@ -11,11 +11,11 @@ const DatapointSchema = new Schema({
     required: false
   },
   sleeptime: {
-    type: Int32Array,
+    type: number,
     required: true
   },
   sleepquality: {
-      type: Int32Array,
+      type: Number,
       required: true
   },
   expires: { type: Date, default: Date.now, expires: 43200 } // 12 hours
