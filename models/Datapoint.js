@@ -6,6 +6,10 @@ const DatapointSchema = new Schema({
     type: String,
     required: true
   },
+  date: {
+    type: Date,
+    required: True
+  },
   notes: {
     type: String,
     required: false
