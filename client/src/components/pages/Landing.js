@@ -5,24 +5,52 @@ import M from "materialize-css";
 import LinearLoadingSymbol from "../layout/LinearLoadingSymbol";
 import './Landing.css'
 
+const mockData = [
+    
+]
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 function Landing(props) {
 
-    const [images, setImages] = useState(null);
+    const [data, setData] = useState(null);
+    const [startDate, setStartDate] = useState(new Date().setHours(0,0,0,0));
+    const [endDate, setEndDate] = useState(new Date().setHours(0,0,0,0));
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // getImages().catch(err => console.log(err))
+        const elem1 = document.querySelectorAll('.startdatepicker');
+        const options1 = {
+            defaultDate: new Date(new Date().getTime() - 7 * (24 * 60 * 60 * 1000)),
+            setDefaultDate: true,
+            autoClose: true,
+            maxDate: new Date(),
+            onSelect: function(date) {
+                setStartDate({ start: new Date(new Date(date).setHours(0,0,0,0))});
+            }
+        }
+        M.Datepicker.init(elem1, options1);
+        const elem2 = document.querySelectorAll('.enddatepicker');
+        const options2 = {
+            defaultDate: new Date(),
+            setDefaultDate: true,
+            autoClose: true,
+            maxDate: new Date(),
+            onSelect: function(date) {
+                setEndDate({ start: new Date(new Date(date).setHours(0,0,0,0))});
+            }
+        }
+        M.Datepicker.init(elem2, options2);
+        setData("asdfasdf")
+        // getData().catch(err => console.log(err))
     }, [])
 
-    async function getImages() {
+    async function getData() {
         window.scrollTo(0, 0);
-        axios.get(`${serverUrl}/api/images`)
+        axios.get(`${serverUrl}/api/datapoints`)
             .then(response => {
                 setLoading(false);
                 window.scrollTo(0, 0);
-                setImages(response.data);
+                setData(response.data);
             })
             .catch(err => {
                 setLoading(false);
@@ -34,7 +62,7 @@ function Landing(props) {
     let content;
 
     // If loading, render loading symbol
-    if (loading || images === null) { 
+    if (loading || data === null) { 
         content = (<React.Fragment>
                         <i className="material-icons logo">public</i>
                         <LinearLoadingSymbol />
@@ -43,47 +71,27 @@ function Landing(props) {
                         </h5>
                     </React.Fragment>);
     }
-    else if (images.length === 0) {
-        content = (<h5 className="no-images grey-text text-darken-2">
-                        No images found
-                    </h5>);
-    }
     else {
-        const cards = images.map((image, index) => {
-            return (
-                <div className="col s12 m6 l4" key={index}>
-                    <div className="card left-align">
-                        <div className="card-image waves-effect waves-light">
-                            <img className="activator" src={`data:image/jpeg;base64,${image.blob}`} alt=""/>
-                        </div>
-                        <div className="card-content">
-                            <span className="card-title activator">{ image.name }</span>
-                        </div>
-                        <div className="card-reveal">
-                            <span className="card-title">{image.name}<i className="material-icons right">close</i></span>
-                            <p className="card-description-field grey-text">{ image.description }</p>
-                            <button className="btn btn-small waves-effect waves-light hoverable blue accent-3"
-                                // onClick={() => deleteImage(image.id)}
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>)}
-        )
-
         content = (<div className="row">
-                        { cards }
+                        
                     </div>);
     }
 
     return (<div className="container">
                 <div className="col s12 center-align header-inputs">
+                    <label className="left-align datepicker">
+                        Start date
+                        <input type="text" class="startdatepicker"></input>
+                    </label>
+                    <label className="left-align datepicker">
+                        End date
+                        <input type="text" class="enddatepicker"></input>
+                    </label>
                     <Link
-                        to="/add-image"
-                        className="add-image btn btn-large waves-effect waves-light hoverable blue accent-3"
+                        to="/add"
+                        className="add-btn btn btn-large waves-effect waves-light hoverable blue accent-3"
                         >
-                            Add Image
+                            Add
                         </Link>
                 </div>
                 <div className="main-content valign-wrapper">

@@ -10,7 +10,7 @@ import Navbar from "./components/layout/Navbar";
 import Landing from "./components/pages/Landing";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
-import AddImage from "./components/pages/AddImage";
+import AddDatapoint from "./components/pages/AddDatapoint";
 
 const ProtectedRoute = ({component: Component, user, ...rest}) => {
   return (
@@ -51,7 +51,7 @@ function App() {
         <Switch>
           <Route exact path="/login" render={(props) => <Login {...props} user={user} setUser={setUser} />} />
           <Route exact path="/register" render={(props) => <Register {...props} user={user} />} />
-          <ProtectedRoute exact path="/add-image" user={user} component={AddImage}/>
+          <ProtectedRoute exact path="/add" user={user} component={AddDatapoint}/>
           <ProtectedRoute path="/" component={Landing} user={user} />
         </Switch>
         <Footer />

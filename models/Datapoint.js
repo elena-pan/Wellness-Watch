@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const DatapointSchema = new Schema({
-  user: {
-    type: String,
+  userid: {
+    type: Number,
     required: true
   },
   date: {
@@ -15,7 +15,7 @@ const DatapointSchema = new Schema({
     required: false
   },
   sleeptime: {
-    type: number,
+    type: Number,
     required: true
   },
   sleepquality: {
