@@ -18,17 +18,17 @@ function Navbar(props) {
     const loginLogoutLinks = props.user ?
         (<React.Fragment>
             <li>
-                <Link to="/login" className="blue-text" onClick={() => logOut()}>Logout</Link>
+                <Link to="/login" className="teal-text" onClick={() => logOut()}>Logout</Link>
             </li>
         </React.Fragment>
         ) : (
         <React.Fragment>
             <li>
-                <Link to="/register" className="blue-text">Register</Link>
+                <Link to="/register" className="teal-text">Register</Link>
             </li>
             <li className="black-text">|</li>
             <li>
-                <Link to="/login" className="blue-text">Login</Link>
+                <Link to="/login" className="teal-text">Login</Link>
             </li>
         </React.Fragment>
         );

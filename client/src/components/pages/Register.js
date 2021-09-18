@@ -40,7 +40,7 @@ function Register(props) {
                         <b>Register</b>
                     </h4>
                     <p className="grey-text text-darken-1">
-                        Already have an account? <Link to="/login">Login</Link>
+                        Already have an account? <Link to="/login" className="teal-text">Login</Link>
                     </p>
                     </div>
                     <form noValidate onSubmit={onSubmit}>
@@ -91,7 +91,7 @@ function Register(props) {
                             marginTop: "1rem"
                         }}
                         type="submit"
-                        className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                        className="btn btn-large waves-effect waves-light hoverable"
                         >
                             Register
                         </button>

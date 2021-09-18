@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer,
+        Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 import axios from "axios"
 import M from "materialize-css";
 
@@ -134,24 +135,54 @@ function Landing(props) {
     else {
         content = (
                 <React.Fragment>
+                    <p style={{"textAlign": "center", "marginBottom": 0, "paddingTop": "0.5rem"}}><b>Maslow's Hierarchy of Needs</b></p>
+                    <ResponsiveContainer height={300} width={500}> 
+                        <RadarChart outerRadius={120} data={[
+                            {
+                                type: "Self-actualization",
+                                value: data.maslows.actualization
+                            },
+                            {
+                                type: "Esteem",
+                                value: data.maslows.esteem
+                            },
+                            {
+                                type: "Belongingness",
+                                value: data.maslows.belongingness
+                            },
+                            {
+                                type: "Safety",
+                                value: data.maslows.safety
+                            },
+                            {
+                                type: "Physiological",
+                                value: data.maslows.physiological
+                            },
+                        ]}>
+                            <PolarGrid />
+                            <PolarAngleAxis dataKey="type" />
+                            <PolarRadiusAxis angle={18} domain={[0, 10]} />
+                            <Radar dataKey="value" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                        </RadarChart>
+                    </ResponsiveContainer>
                     <p style={{"textAlign": "center", "marginBottom": 0, "paddingTop": "0.5rem"}}><b>Sleep</b></p>
                     <ResponsiveContainer height={300} width={500}> 
                         <LineChart data={data.timedata} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
-                        <Line type="monotone" dataKey="sleeptime" stroke="#009688" name="Sleep time" />
-                        <Line type="monotone" dataKey="sleepquality" stroke="#E5B522" name="Sleep quality" />
-                        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-                        <Legend verticalAlign="top" align="center" height={30} />
-                        <Tooltip labelFormatter={date => `${months[date.getMonth()]} ${date.getDate()}`} formatter={(value, name, props) => {
-                            if (name === "Sleep time") {
-                                return [`${value} hours`, name, props];
-                            }
-                            else if (name === "Sleep quality") {
-                                return [value, name, props];
-                            }
-                        }} />
-                        <XAxis dataKey='date' tickFormatter={date => `${months[date.getMonth()]} ${date.getDate()}`} />
-                        <YAxis dataKey="sleeptime" yAxisId={0}/>
-                        <YAxis dataKey="sleepquality" yAxisId={1} orientation="right" />
+                            <Line type="monotone" dataKey="sleeptime" stroke="#009688" name="Sleep time" />
+                            <Line type="monotone" dataKey="sleepquality" stroke="#E5B522" name="Sleep quality" />
+                            <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+                            <Legend verticalAlign="top" align="center" height={30} />
+                            <Tooltip labelFormatter={date => `${months[date.getMonth()]} ${date.getDate()}`} formatter={(value, name, props) => {
+                                if (name === "Sleep time") {
+                                    return [`${value} hours`, name, props];
+                                }
+                                else if (name === "Sleep quality") {
+                                    return [value, name, props];
+                                }
+                            }} />
+                            <XAxis dataKey='date' tickFormatter={date => `${months[date.getMonth()]} ${date.getDate()}`} />
+                            <YAxis dataKey="sleeptime" yAxisId={0}/>
+                            <YAxis dataKey="sleepquality" yAxisId={1} orientation="right" />
                         </LineChart>
                     </ResponsiveContainer>
                     </React.Fragment>);
@@ -161,17 +192,17 @@ function Landing(props) {
                 <div className="col s12 center-align header-inputs">
                     <label className="left-align datepicker">
                         Start date
-                        <input type="text" class="startdatepicker"></input>
+                        <input type="text" className="startdatepicker"></input>
                     </label>
                     <label className="left-align datepicker">
                         End date
-                        <input type="text" class="enddatepicker"></input>
+                        <input type="text" className="enddatepicker"></input>
                     </label>
                     <Link
                         to="/add"
-                        className="add-btn btn btn-large waves-effect waves-light hoverable blue accent-3"
+                        className="add-btn btn btn-large waves-effect waves-light hoverable"
                         >
-                            Add
+                            Add Log
                         </Link>
                 </div>
                 <div className="main-content valign-wrapper">

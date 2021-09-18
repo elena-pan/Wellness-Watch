@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const DatapointSchema = new Schema({
-  userid: {
-    type: Number,
+  username: {
+    type: String,
     required: true
   },
   date: {
