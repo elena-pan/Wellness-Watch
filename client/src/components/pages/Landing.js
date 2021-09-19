@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer,
-        Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
+        Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Label } from 'recharts';
 import axios from "axios"
 import M from "materialize-css";
 
@@ -78,6 +78,7 @@ function Landing(props) {
     const [startDate, setStartDate] = useState(`${pastDate.getFullYear()}-${pastDate.getMonth()+1}-${pastDate.getDate()}`);
     const [endDate, setEndDate] = useState(`${currentDate.getFullYear()}-${currentDate.getMonth()+1}-${currentDate.getDate()}`);
     const [loading, setLoading] = useState(true);
+    const [showPredicted, setShowPredicted] = useState(true);
 
     useEffect(() => {
         const elem1 = document.querySelectorAll('.startdatepicker');
@@ -115,6 +116,22 @@ function Landing(props) {
             .then(response => {
                 setLoading(false);
                 window.scrollTo(0, 0);
+                const nextDate = new Date(new Date(response.data.timedata[response.data.timedata.length-1].date).getTime() + 1 * (24 * 60 * 60 * 1000));
+                const nextNextDate = new Date(nextDate.getTime() + 1 * (24 * 60 * 60 * 1000));
+                response.data.timedatawithpredicted = response.data.timedata.map(value => value)
+                response.data.timedatawithpredicted[response.data.timedata.length-1].lastReal = true;
+                response.data.timedatawithpredicted[response.data.timedata.length-1].predictedsleeptime = response.data.timedata[response.data.timedata.length-1].sleeptime;
+                response.data.timedatawithpredicted[response.data.timedata.length-1].predictedsleepquality = response.data.timedata[response.data.timedata.length-1].sleepquality;
+                response.data.timedatawithpredicted.push({
+                    date: nextDate,
+                    predictedsleeptime: response.data.predictions.sleeptime[0],
+                    predictedsleepquality: response.data.predictions.sleepquality[0]
+                });
+                response.data.timedatawithpredicted.push({
+                    date: nextNextDate,
+                    predictedsleeptime: response.data.predictions.sleeptime[1],
+                    predictedsleepquality: response.data.predictions.sleepquality[1]
+                });
                 setData(response.data);
             })
             .catch(err => {
@@ -170,10 +187,22 @@ function Landing(props) {
                         </RadarChart>
                     </ResponsiveContainer>
                     <p style={{"textAlign": "center", "marginBottom": 0, "paddingTop": "0.5rem"}}><b>Sleep</b></p>
+                    <div class="switch">
+                        <label>
+                            <input type="checkbox" defaultChecked={showPredicted} onChange={e => setShowPredicted(e.target.checked)}></input>
+                            <span class="lever" style={{marginRight: "3px"}}></span>
+                        Predictions
+                        </label>
+                    </div>
                     <ResponsiveContainer height={300} width={500}> 
-                        <LineChart data={data.timedata} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
+                        <LineChart data={showPredicted ? data.timedatawithpredicted : data.timedata} margin={{ top: 5, right: 5, bottom: 5, left: 0 }}>
                             <Line type="monotone" dataKey="sleeptime" stroke="#009688" name="Sleep time" />
                             <Line type="monotone" dataKey="sleepquality" stroke="#E5B522" name="Sleep quality" />
+                            {showPredicted ? (<React.Fragment>
+                                <Line type="monotone" dataKey="predictedsleeptime" stroke="#009688" name="Sleep time (predicted)" legendType="none" strokeDasharray="5 5" />
+                                <Line type="monotone" dataKey="predictedsleepquality" stroke="#E5B522" name="Sleep quality (predicted)" legendType="none" strokeDasharray="5 5" />
+                                </React.Fragment>) : <React.Fragment></React.Fragment>
+                            }
                             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
                             <Legend verticalAlign="top" align="center" height={30} />
                             <Tooltip labelFormatter={date => `${months[new Date(date).getMonth()]} ${new Date(date).getDate()}`} formatter={(value, name, props) => {
@@ -183,10 +212,25 @@ function Landing(props) {
                                 else if (name === "Sleep quality") {
                                     return [value, name, props];
                                 }
+                                if (!props.payload.lastReal) {
+                                    if (name === "Sleep time (predicted)") {
+                                        return [`${Math.round(value)} hours`, name, props]; 
+                                    }
+                                    else {
+                                        return [Math.round(value), name, props]; 
+                                    }
+                                }
+                                else {
+                                    return [null, null, props];
+                                }
                             }} />
                             <XAxis dataKey='date' tickFormatter={date => `${months[new Date(date).getMonth()]} ${new Date(date).getDate()}`} />
-                            <YAxis dataKey="sleeptime" yAxisId={0}/>
-                            <YAxis dataKey="sleepquality" yAxisId={1} orientation="right" />
+                            <YAxis dataKey="sleeptime" yAxisId={0} domain={[1, 'auto']}>
+                                <Label position="insideLeft" angle={-90} offset={30} style={{fill: "#808080"}} >Sleep time</Label>
+                            </YAxis>
+                            <YAxis dataKey="sleepquality" yAxisId={1} orientation="right" domain={[1,10]}>
+                                <Label position="insideRight" angle={90} offset={30} style={{fill: "#808080"}} >Sleep quality</Label>
+                            </YAxis>
                         </LineChart>
                     </ResponsiveContainer>
                     </React.Fragment>);

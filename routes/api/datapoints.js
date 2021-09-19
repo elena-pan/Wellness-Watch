@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const passport = require("passport");
+const predict = require("../../utils/predict")
+
 const Datapoint = require('../../models/Datapoint');
+const Prediction = require('../../models/Prediction');
 
 router.get("",
     passport.authenticate("jwt", { session: false }), 
@@ -19,7 +22,6 @@ router.get("",
                         "safety": 0,
                         "physiological": 0,
                     }
-        
                 }
                 docs.forEach(element => {
                     datedata = {
@@ -42,9 +44,14 @@ router.get("",
                     result.maslows.safety /= result.timedata.length;
                     result.maslows.physiological /= result.timedata.length;
                 }
-                res.json(result);
+                Prediction.find({ username: req.user.username })
+                    .then(arr => {
+                        result.predictions = arr[0];
+                        res.send(result);
+                    })
+                    .catch(err => res.status(400).json(err))
             })
-            .catch(err => console.log(err))
+            .catch(err => res.status(400).json(err))
 });
 
 router.post("",
@@ -67,8 +74,9 @@ router.post("",
                     physiological: req.body.physiological
                 });
                 newData.save()
-                      .then(document => {
-                          res.status(200).json({ success: true })
+                    .then(document => {
+                            predict(req.user.username);
+                            res.status(200).json({ success: true })
                       })
                       .catch(err => console.log(err)); 
             }
