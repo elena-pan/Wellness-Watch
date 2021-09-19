@@ -25,7 +25,7 @@ function AddImage(props) {
             autoClose: true,
             maxDate: new Date(),
             onSelect: function(date) {
-                setDate({ start: new Date(new Date(date).setHours(0,0,0,0))});
+                setDate(new Date(new Date(date).setHours(0,0,0,0)));
             }
         }
         M.Datepicker.init(elems, options);

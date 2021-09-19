@@ -72,45 +72,51 @@ const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov
 
 function Landing(props) {
 
+    const pastDate = new Date(new Date().getTime() - 7 * (24 * 60 * 60 * 1000));
+    const currentDate = new Date(new Date().setHours(0,0,0,0));
     const [data, setData] = useState(null);
-    const [startDate, setStartDate] = useState(new Date().setHours(0,0,0,0));
-    const [endDate, setEndDate] = useState(new Date().setHours(0,0,0,0));
+    const [startDate, setStartDate] = useState(`${pastDate.getFullYear()}-${pastDate.getMonth()+1}-${pastDate.getDate()}`);
+    const [endDate, setEndDate] = useState(`${currentDate.getFullYear()}-${currentDate.getMonth()+1}-${currentDate.getDate()}`);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const elem1 = document.querySelectorAll('.startdatepicker');
         const options1 = {
-            defaultDate: new Date(new Date().getTime() - 7 * (24 * 60 * 60 * 1000)),
+            defaultDate: pastDate,
             setDefaultDate: true,
             autoClose: true,
             maxDate: new Date(),
             onSelect: function(date) {
-                setStartDate({ start: new Date(new Date(date).setHours(0,0,0,0))});
+                setStartDate(`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`);
             }
         }
         M.Datepicker.init(elem1, options1);
         const elem2 = document.querySelectorAll('.enddatepicker');
         const options2 = {
-            defaultDate: new Date(),
+            defaultDate: currentDate,
             setDefaultDate: true,
             autoClose: true,
             maxDate: new Date(),
             onSelect: function(date) {
-                setEndDate({ start: new Date(new Date(date).setHours(0,0,0,0))});
+                setEndDate(`${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`);
             }
         }
         M.Datepicker.init(elem2, options2);
-        getData().catch(err => console.log(err))
+        getData().catch(err => console.log(err));
     }, [])
+
+    useEffect(() => {
+        getData().catch(err => console.log(err));
+    }, [startDate, endDate])
 
     async function getData() {
         window.scrollTo(0, 0);
-        axios.get(`${serverUrl}/api/datapoints`)
+        axios.get(`${serverUrl}/api/datapoints?startDate=${startDate}&endDate=${endDate}`)
             .then(response => {
                 setLoading(false);
                 window.scrollTo(0, 0);
                 console.log(response.data)
-                setData(response.data);
+                setData(mockData);
             })
             .catch(err => {
                 setLoading(false);

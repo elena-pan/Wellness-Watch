@@ -5,20 +5,22 @@ const Datapoint = require('../../models/Datapoint');
 router.get("",
     passport.authenticate("jwt", { session: false }), 
     async (req, res) => {
-        result = {
-            "timedata": [],
-            "maslows": {
-                "actualization": 0,
-                "esteem": 0,
-                "belongingness": 0,
-                "safety": 0,
-                "physiological": 0,
-            }
-
-        }
-        Datapoint.find({ username: req.user.username })
+        Datapoint.find({ username: req.user.username, date: {
+            $gte: req.query.startDate,
+            $lte: req.query.endDate
+        }})
             .then(docs => {
-                counter = 0
+                const result = {
+                    "timedata": [],
+                    "maslows": {
+                        "actualization": 0,
+                        "esteem": 0,
+                        "belongingness": 0,
+                        "safety": 0,
+                        "physiological": 0,
+                    }
+        
+                }
                 docs.forEach(element => {
                     datedata = {
                         "date": element.date,
@@ -33,12 +35,12 @@ router.get("",
                     result.maslows.safety += element.safety;
                     result.maslows.physiological += element.physiological;
                 });
-                if (counter != 0) {
-                    result.maslows.actualization /= result.timedata.length();
-                    result.maslows.esteem /= result.timedata.length();
-                    result.maslows.belongingness /= result.timedata.length();
-                    result.maslows.safety /= result.timedata.length();
-                    result.maslows.physiological /= result.timedata.length();
+                if (result.timedata.length != 0) {
+                    result.maslows.actualization /= result.timedata.length;
+                    result.maslows.esteem /= result.timedata.length;
+                    result.maslows.belongingness /= result.timedata.length;
+                    result.maslows.safety /= result.timedata.length;
+                    result.maslows.physiological /= result.timedata.length;
                 }
                 res.json(result);
             })
@@ -48,7 +50,7 @@ router.get("",
 router.post("",
     passport.authenticate("jwt", { session: false }), 
     async (req, res) => {
-        Datapoint.findOne({ "username": req.user.username, "date": req.body.date }).then(document => {    
+        Datapoint.findOne({ "username": req.user.username, "date": new Date(req.body.date) }).then(document => {    
             if (document) {
                 return res.status(400).json({ error: "Data for this date exists" });
             } else {
