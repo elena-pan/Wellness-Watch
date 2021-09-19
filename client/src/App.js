@@ -8,6 +8,7 @@ import ScrollToTop from "./components/layout/ScrollToTop";
 import Footer from "./components/layout/Footer";
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/pages/Landing";
+import Report from "./components/pages/Report";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import AddDatapoint from "./components/pages/AddDatapoint";
@@ -52,6 +53,7 @@ function App() {
           <Route exact path="/login" render={(props) => <Login {...props} user={user} setUser={setUser} />} />
           <Route exact path="/register" render={(props) => <Register {...props} user={user} />} />
           <ProtectedRoute exact path="/add" user={user} component={AddDatapoint}/>
+          <ProtectedRoute exact path="/report" user={user} component={Report}/>
           <ProtectedRoute path="/" component={Landing} user={user} />
         </Switch>
         <Footer />

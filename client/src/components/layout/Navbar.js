@@ -18,6 +18,9 @@ function Navbar(props) {
     const loginLogoutLinks = props.user ?
         (<React.Fragment>
             <li>
+                <Link to="/report" className="black-text" >My Report</Link>
+            </li>
+            <li>
                 <Link to="/login" className="teal-text" onClick={() => logOut()}>Logout</Link>
             </li>
         </React.Fragment>
