@@ -115,8 +115,7 @@ function Landing(props) {
             .then(response => {
                 setLoading(false);
                 window.scrollTo(0, 0);
-                console.log(response.data)
-                setData(mockData);
+                setData(response.data);
             })
             .catch(err => {
                 setLoading(false);
