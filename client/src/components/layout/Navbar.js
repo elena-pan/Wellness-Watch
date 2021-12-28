@@ -47,7 +47,7 @@ function Navbar(props) {
                             className="col s5 brand-logo left black-text"
                         >
                             <i className="material-icons">public</i>
-                            HTN
+                            Wellness Watch
                         </Link>
                         <ul className="right">
                             { loginLogoutLinks }
