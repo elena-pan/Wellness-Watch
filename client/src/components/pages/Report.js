@@ -8,8 +8,8 @@ function Report(props) {
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     const [averages, setAverages] = useState(null);
-    const [sleepTime, setSleepTime] = useState(null);
-    const [sleepQuality, setSleepQuality] = useState(null);
+    const [sleepTime, setSleepTime] = useState(0);
+    const [sleepQuality, setSleepQuality] = useState(0);
 
     async function getData() {
         axios.get(`${serverUrl}/api/datapoints?startDate=${pastDate}&endDate=${currentDate}`).then((result) => {
@@ -59,27 +59,27 @@ function Report(props) {
                 <div className="col s8 offset-s2">
                     <p style={{marginTop: "1rem"}}><i>Needs</i></p>
                     <p>Your physiological and safety needs were {(averages.physiological + averages.safety) > 10 ? "well" : "poorly"} met this week,
-                        rated <b>{averages.physiological} and {averages.safety}</b> respectively - these are basic needs like food, water, and security.
-
+                        rated <b>{averages.physiological.toFixed(2)} and {averages.safety.toFixed(2)}</b> respectively - these are basic needs like food, water, and security.
+                        <br></br>
                         Belongingness needs, which are the emotional need for interpersonal relationships, were {(averages.belonging) > 5 ? "" : "not"} fully met this week, 
-                        with a rating of <b>{averages.belongingness}</b>.
-
-                        Esteem was a {averages.esteem > 5 ? "high" : "low"} point this week, rated <b>{averages.esteem}</b>. 
-                        Your self-actualization {averages.actualization > 5 ? "was high this week" : "could use more work"}, with a rating of {averages.actualization}. 
+                        with a rating of <b>{averages.belongingness.toFixed(2)}</b>.
+                        <br></br>
+                        Esteem was a <b>{averages.esteem > 5 ? "high" : "low"}</b> point this week, rated <b>{averages.esteem}</b>. 
+                        Your self-actualization {averages.actualization > 5 ? "was high this week" : "could use more work"}, with a rating of {averages.actualization.toFixed(2)}. 
                         This is the highest level of Maslow's hierarchy and describes your self-fulfillment, and sense of accomplishment. 
-                        
+                        <br></br>
                         Overall, you rated your self-actualization and belongingness needs as 
-                        <b>{(averages.physiological + averages.safety) > (averages.actualization + averages.belonging) ? "less" : "more"}</b> 
+                        <b>{(averages.physiological + averages.safety) > (averages.actualization + averages.belonging) ? " more " : " less "}</b> 
                         fulfilled than your physiological and security needs.
                     </p>
 
                     <p style={{marginTop: "2rem"}}><i>Sleep</i></p>
-                    <p>You slept <b>{sleepTime}</b> hours this week, with a qualtiy of <b>{sleepQuality}</b>! 
+                    <p>You slept <b>{sleepTime.toFixed(2)}</b> hours this week, with a qualtiy of <b>{sleepQuality.toFixed(2)}</b>! 
                     {(sleepTime > 10 || sleepTime < 7) ? 
                     ` That amount of sleep could use a bit more consistency - it's highly recommended to get at least 7 hours of sleep, on average. 
                     Sleeping more than 10 hours is also generally detrimental. ` 
                     : 
-                    ` That's quite consistent for sleep time - Keep up the good work. `} 
+                    ` That's quite consistent for sleep time - keep up the good work. `} 
                     {sleepQuality <= 5 ? 
                     ` Your sleep quality was quite poor this week - try and maintain a consistent sleep scheudle, and ensure you have good sleep hygine. `
                     : 
