@@ -31,8 +31,8 @@ This project was built for [Hack the North 2021](https://devpost.com/software/we
 
 ## Demo
 
-![Demo Video](https://user-images.githubus![2022-03-10 23-29-34 (1)](https://user-images.githubusercontent.com/64248134/157815327-2f6d9eba-d176-4bb6-b830-a37aea366e99.gif)
-ercontent.com/64248134/156914345-3cea043e-9766-4a27-a4f7-285c65364d02.gif)
+![Demo Video](https://user-images.githubusercontent.com/64248134/157815391-482d42a2-4337-4b30-a63c-267d20951b49.gif)
+
 
 ## Features
 
